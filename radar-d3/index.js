@@ -162,7 +162,7 @@ var mycfg = {
 	TranslateY: 30,
 	ExtraWidthX: 300,
 	ExtraWidthY: 100,
-	color: d3.scale.category10()
+	color: colorscale
 }
 
 //Call function to draw the Radar chart
@@ -185,7 +185,7 @@ var text = svg.append( "text" )
 	.attr( 'transform', 'translate(90,0)' )
 	.attr( "x", w - 70 )
 	.attr( "y", 10 )
-	.attr( "font-size", "12px" )
+	.attr( "font-size", "1.2em" )
 	.attr( "fill", "#404040" )
 	.text( "What % of owners use a specific service in a week" );
 
@@ -218,7 +218,7 @@ legend.selectAll( 'text' )
 	.attr( "y", function ( d, i ) {
 		return i * 20 + 9;
 	} )
-	.attr( "font-size", "11px" )
+	.attr( "font-size", "1.1em" )
 	.attr( "fill", "#737373" )
 	.text( function ( d ) {
 		return d;
