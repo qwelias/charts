@@ -1,5 +1,7 @@
 "use strict";
 
+// documentation: http://c3js.org/reference.html
+
 var chart = c3.generate( {
 	bindto: '#chart',
 	size: {
