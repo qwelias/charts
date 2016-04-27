@@ -24,8 +24,8 @@ var RadarChart = {
 			ToRight: 5,
 			TranslateX: 80,
 			TranslateY: 30,
-			ExtraWidthX: 100,
-			ExtraWidthY: 100,
+			ExtraWidth: 100,
+			ExtraHeight: 100,
 			color: d3.scale.category10()
 		};
 
@@ -51,8 +51,8 @@ var RadarChart = {
 
 		var g = d3.select( id )
 			.append( "svg" )
-			.attr( "width", cfg.w + cfg.ExtraWidthX )
-			.attr( "height", cfg.h + cfg.ExtraWidthY )
+			.attr( "width", cfg.w + cfg.ExtraWidth )
+			.attr( "height", cfg.h + cfg.ExtraHeight )
 			.append( "g" )
 			.attr( "transform", "translate(" + cfg.TranslateX + "," + cfg.TranslateY + ")" );;
 

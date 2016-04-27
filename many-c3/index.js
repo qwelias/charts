@@ -31,6 +31,7 @@ var chart = c3.generate( {
 			}
 		},
         y:{
+			label: 'huehuehue',
 			tick:{
 				values: new Array(100).fill(0).map(function(v,i){ return i*10}) // шаги задаются массивом
 			}
