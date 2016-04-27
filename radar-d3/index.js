@@ -13,14 +13,15 @@ var cfg = {
 	factor: 1, // скаляр паутинки
 	factorLegend: 1, // скаляр легенды
 	levels: 10, // рисочки
+	guidelevels: [5, 10], // рисочки пожирнее
 	format: d3.format( ),
 	outerLine: true, // внешняя линия
 	radians: 2 * Math.PI, // зависит от кол-ва лучей?
 	opacityArea: 0.2, // зональная прозрачность
 	ToRight: 5, // смещение шкалы
-	TranslateX: 80,
+	TranslateX: 120,
 	TranslateY: 30,
-	ExtraWidth: 400,
+	ExtraWidth: 500,
 	ExtraHeight: 100,
 	color: colorscale,
 	labels: true

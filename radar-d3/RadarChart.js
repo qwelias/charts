@@ -17,6 +17,7 @@ var RadarChart = {
 			factor: 1,
 			factorLegend: .85,
 			levels: 3,
+			guidelevels: [],
 			format: d3.format( '%' ),
 			maxValue: 0,
 			radians: 2 * Math.PI,
@@ -56,8 +57,6 @@ var RadarChart = {
 			.append( "g" )
 			.attr( "transform", "translate(" + cfg.TranslateX + "," + cfg.TranslateY + ")" );;
 
-		var tooltip;
-
 		//Circular segments
 		for ( var j = 0; j < cfg.levels - (cfg.outerLine ? 0 : 1); j++ ) {
 			var levelFactor = cfg.factor * radius * ( ( j + 1 ) / cfg.levels );
@@ -80,7 +79,7 @@ var RadarChart = {
 				.attr( "class", "line" )
 				.style( "stroke", "grey" )
 				.style( "stroke-opacity", "0.75" )
-				.style( "stroke-width", "0.3px" )
+				.style( "stroke-width", (cfg.guidelevels.indexOf(j+1) > -1 ? 1 : 0.3) + "px" )
 				.attr( "transform", "translate(" + ( cfg.w / 2 - levelFactor ) + ", " + ( cfg.h / 2 - levelFactor ) + ")" );
 		}
 
@@ -234,7 +233,7 @@ var RadarChart = {
 				} )
 				.style( 'opacity', 0 )
 				.style( 'font-family', 'sans-serif' )
-				.style( 'font-size', '1.3em' );
+				.style( 'font-size', '1.1em' );
 
 			if(cfg.labels){
 				labels.style('opacity', 1)
