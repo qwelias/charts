@@ -23,7 +23,7 @@ var cfg = {
 	ExtraWidth: 400,
 	ExtraHeight: 100,
 	color: colorscale,
-	labels: false
+	labels: true
 }
 
 //Call function to draw the Radar chart

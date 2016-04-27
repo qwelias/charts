@@ -194,8 +194,9 @@ var RadarChart = {
 
 
 		d.forEach( function ( y, x ) {
-			g.selectAll( ".nodes" )
-				.data( y ).enter()
+			var nodes = g.selectAll( ".nodes" );
+
+			var circles = nodes.data( y ).enter()
 				.append( "svg:circle" )
 				.attr( "class", "radar-chart-serie" + series )
 				.attr( 'r', cfg.radius )
@@ -212,20 +213,37 @@ var RadarChart = {
 				.attr( "cy", function ( j, i ) {
 					return cfg.h / 2 * ( 1 - ( Math.max( j.value, 0 ) / cfg.maxValue ) * cfg.factor * Math.cos( i * cfg.radians / total ) );
 				} )
-				.attr( "data-id", function ( j ) {
-					return j.axis
+				.attr( "data-id", function ( j, i ) {
+					return j.axis+' : '+i
 				} )
 				.style( "fill", cfg.color( series ) ).style( "fill-opacity", .9 )
-				.on( 'mouseover', function ( d ) {
-					newX = parseFloat( d3.select( this ).attr( 'cx' ) ) - 10;
-					newY = parseFloat( d3.select( this ).attr( 'cy' ) ) - 5;
 
-					tooltip
-						.attr( 'x', newX )
-						.attr( 'y', newY )
-						.text( Format( d.value ) )
-						.transition( 200 )
-						.style( 'opacity', 1 );
+			var labels = nodes.data( y ).enter()
+				.append( "svg:text" )
+				.attr( "x", function ( j, i ) {
+					return cfg.w / 2 * ( 1 - ( Math.max( j.value, 0 ) / cfg.maxValue ) * cfg.factor * Math.sin( i * cfg.radians / total ) ) - 10;
+				} )
+				.attr( "y", function ( j, i ) {
+					return cfg.h / 2 * ( 1 - ( Math.max( j.value, 0 ) / cfg.maxValue ) * cfg.factor * Math.cos( i * cfg.radians / total ) ) - 5;
+				} )
+				.attr( "data-id", function ( j, i ) {
+					return j.axis+' : '+i
+				} )
+				.text( function ( j ) {
+					return Math.max( j.value, 0 )
+				} )
+				.style( 'opacity', 0 )
+				.style( 'font-family', 'sans-serif' )
+				.style( 'font-size', '1.3em' );
+
+			if(cfg.labels){
+				labels.style('opacity', 1)
+			}else{
+				circles.on( 'mouseover', function ( d ) {
+
+					g.select('text[data-id="'+d3.select(this).attr('data-id')+'"]')
+					.transition( 200 )
+					.style( 'opacity', 1 );
 
 					z = "polygon." + d3.select( this ).attr( "class" );
 					g.selectAll( "polygon" )
@@ -236,24 +254,17 @@ var RadarChart = {
 						.style( "fill-opacity", .7 );
 				} )
 				.on( 'mouseout', function () {
-					tooltip
+					g.select('text[data-id="'+d3.select(this).attr('data-id')+'"]')
 						.transition( 200 )
 						.style( 'opacity', 0 );
 					g.selectAll( "polygon" )
 						.transition( 200 )
 						.style( "fill-opacity", cfg.opacityArea );
 				} )
-				.append( "svg:title" )
-				.text( function ( j ) {
-					return Math.max( j.value, 0 )
-				} );
+			}
 
 			series++;
 		} );
-		//Tooltip
-		tooltip = g.append( 'text' )
-			.style( 'opacity', 0 )
-			.style( 'font-family', 'sans-serif' )
-			.style( 'font-size', '1.3em' );
+
 	}
 };
