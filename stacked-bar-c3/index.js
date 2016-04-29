@@ -17,9 +17,9 @@ var chart = c3.generate( {
 		labels: {
 			centered: true
 		},
-		groups: [ // для stacked
-			[ "Здания", "Сооружения", "Машини и оборудование", "Транспортные средства", "Прочие осн. средства" ]
-		],
+		// groups: [ // для stacked
+		// 	[ "Здания", "Сооружения", "Машини и оборудование", "Транспортные средства", "Прочие осн. средства" ]
+		// ],
 		keys: {
 			x: 'name',
 			value: [ "Здания", "Сооружения", "Машини и оборудование", "Транспортные средства", "Прочие осн. средства" ],
@@ -53,14 +53,17 @@ var chart = c3.generate( {
 			stroke: 'white',
 			'stroke-width': 1,
 			'stroke-linecap': 'round',
-			'stroke-opacity': 0.5,
+			'stroke-opacity': 0.65,
 			'font-size': '1.5em',
 			'font-weight': 'bold'
 		} );
 		d3.selectAll( 'g.c3-bars path' ).each( function () {
 			var box = this.getBBox();
-			var text = getTextOf( this ).style( 'opacity', box.height > 24 ? 1 : 0 );
-			if ( config.data_type == 'bar' && config.data_labels && config.data_labels.centered ) {
+			var text = getTextOf( this ).style( 'opacity', config.data_groups.length ? (box.height > 24 ? 1 : 0) : 1 );
+			if ( config.data_type == 'bar'
+			&& config.data_labels
+			&& config.data_labels.centered
+			&& ( box.height > 24 || config.data_groups.length)) {
 				text.attr( 'y', box.y + box.height / 2 + 6 );
 			}
 		} );
