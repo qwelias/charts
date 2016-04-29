@@ -27,7 +27,8 @@ var RadarChart = {
 			TranslateY: 30,
 			ExtraWidth: 100,
 			ExtraHeight: 100,
-			color: d3.scale.category10()
+			color: d3.scale.category10(),
+			guidecolor: 'gray'
 		};
 
 		if ( 'undefined' !== typeof options ) {
@@ -77,9 +78,9 @@ var RadarChart = {
 					return levelFactor * ( 1 - cfg.factor * Math.cos( ( i + 1 ) * cfg.radians / total ) );
 				} )
 				.attr( "class", "line" )
-				.style( "stroke", "grey" )
+				.style( "stroke", (cfg.guidelevels.indexOf(j+1) > -1 ? cfg.guidecolor : 'grey') )
 				.style( "stroke-opacity", "0.75" )
-				.style( "stroke-width", (cfg.guidelevels.indexOf(j+1) > -1 ? 1 : 0.3) + "px" )
+				.style( "stroke-width", (cfg.guidelevels.indexOf(j+1) > -1 ? 1 : 0.3)*0.1 + "em" )
 				.attr( "transform", "translate(" + ( cfg.w / 2 - levelFactor ) + ", " + ( cfg.h / 2 - levelFactor ) + ")" );
 		}
 
@@ -123,7 +124,7 @@ var RadarChart = {
 			} )
 			.attr( "class", "line" )
 			.style( "stroke", "grey" )
-			.style( "stroke-width", "1px" );
+			.style( "stroke-width", "0.1em" );
 
 		axis.append( "text" )
 			.attr( "class", "legend" )
@@ -160,7 +161,7 @@ var RadarChart = {
 				.enter()
 				.append( "polygon" )
 				.attr( "class", "radar-chart-serie" + series )
-				.style( "stroke-width", "2px" )
+				.style( "stroke-width", "0.2em" )
 				.style( "stroke", cfg.color( series ) )
 				.attr( "points", function ( d ) {
 					var str = "";

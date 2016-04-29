@@ -14,6 +14,7 @@ var cfg = {
 	factorLegend: 1, // скаляр легенды
 	levels: 10, // рисочки
 	guidelevels: [5, 10], // рисочки пожирнее
+	guidecolor: 'coral',
 	format: d3.format( ),
 	outerLine: true, // внешняя линия
 	radians: 2 * Math.PI, // зависит от кол-ва лучей?
