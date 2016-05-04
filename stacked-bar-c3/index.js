@@ -17,14 +17,14 @@ var chart = c3.generate( {
 		labels: {
 			centered: true
 		},
-		// groups: [ // для stacked
-		// 	[ "Здания", "Сооружения", "Машини и оборудование", "Транспортные средства", "Прочие осн. средства" ]
-		// ],
+		groups: [ // для stacked
+			[ "Здания", "Сооружения", "Машини и оборудование", "Транспортные средства", "Прочие осн. средства" ]
+		],
 		keys: {
 			x: 'name',
 			value: [ "Здания", "Сооружения", "Машини и оборудование", "Транспортные средства", "Прочие осн. средства" ],
 		},
-		type: 'bar'
+		type: 'line'
 	},
 	axis: {
 		x: {
@@ -33,7 +33,7 @@ var chart = c3.generate( {
 		y: {
 			tick: {
 				values: new Array( 100 ).fill( 0 ).map( function ( v, i ) {
-						return i * 2
+						return i * 5
 					} ) // шаги задаются массивом
 			}
 		}
@@ -55,18 +55,36 @@ var chart = c3.generate( {
 			'stroke-linecap': 'round',
 			'stroke-opacity': 0.65,
 			'font-size': '1.5em',
-			'font-weight': 'bold'
+			'font-weight': 'bold',
+			"stroke-linejoin": "bevel"
 		} );
-		d3.selectAll( 'g.c3-bars path' ).each( function () {
-			var box = this.getBBox();
-			var text = getTextOf( this ).style( 'opacity', config.data_groups.length ? (box.height > 24 ? 1 : 0) : 1 );
-			if ( config.data_type == 'bar'
-			&& config.data_labels
-			&& config.data_labels.centered
-			&& ( box.height > 24 || config.data_groups.length)) {
-				text.attr( 'y', box.y + box.height / 2 + 6 );
-			}
-		} );
+		switch ( config.data_type ) {
+			case 'bar':
+				d3.selectAll( 'g.c3-bars path' ).each( function () {
+					var box = this.getBBox();
+					var text = getTextOf( this ).style( 'opacity', config.data_groups.length ? ( box.height > 24 ? 1 : 0 ) : 1 );
+					if ( config.data_labels && config.data_labels.centered && ( box.height > 24 || config.data_groups.length ) ) {
+						text.attr( 'y', box.y + box.height / 2 + 6 );
+					}
+				} );
+				break;
+			case 'line':
+			case 'spline':
+			case 'area-spline':
+			case 'area-line':
+				d3.selectAll( 'circle.c3-circle' ).each( function () {
+					var text = getTextOf( this ).each(function(){
+						var self = this;
+						d3.selectAll( 'text.c3-text' ).each( function () {
+							if ( this != self && ifIntersect( this, self ) && self.compareDocumentPosition( this ) == 4 ) {
+								self.style.opacity = 0;
+							}
+						} );
+					});
+				} );
+				break;
+			default: break;
+		}
 	}
 } );
 
@@ -84,4 +102,13 @@ function getTextOf( el ) {
 	var tPref = "c3-texts-";
 	var tnPref = "c3-text-";
 	return d3.select( 'g.' + tPref + name + ' text.' + tnPref + n );
+};
+
+function ifIntersect( s1, s2 ) {
+	s1 = s1.getBoundingClientRect();
+	s2 = s2.getBoundingClientRect();
+	return !( s2.left > s1.right ||
+		s2.right < s1.left ||
+		s2.top > s1.bottom ||
+		s2.bottom < s1.top );
 };
